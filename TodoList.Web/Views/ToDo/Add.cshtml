@@ -1,0 +1,32 @@
+﻿@model ToDo
+
+<div class="container">
+    <form method="post">
+        <div class="mb-3 row">
+            <label for="inputName" class="col-4 col-form-label">Başlık</label>
+            <div class="col-8">
+                <input asp-for="Title" class="form-control"  placeholder="başlık giriniz">
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label for="inputName" class="col-4 col-form-label">içerik</label>
+            <div class="col-8">
+                <input asp-for="Desciription" class="form-control" placeholder="içerik giriniz">
+            </div>
+        </div>
+
+
+        <div class="mb-3 row">
+            <label for="inputName" class="col-4 col-form-label">kategori seçiniz</label>
+            <div class="col-8">
+                <input asp-for="Desciription" class="form-control" placeholder="içerik giriniz">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="offset-sm-4 col-sm-8">
+                <button type="submit" class="btn btn-primary">ekle</button>
+            </div>
+        </div>
+    </form>
+</div>
