@@ -18,30 +18,44 @@ namespace TodoList.Web.Controllers
         {
             return View();
         }
+
         public IActionResult Delete(int id)
         {
             _context.ToDos.Remove(_context.ToDos.Find(id));
             _context.SaveChanges();
-            return RedirectToAction("Index","Home");
+
+            return RedirectToAction("Index", "Home");
+
         }
 
-        public IActionResult GetAll() 
+        public List<ToDo> GetAll()
         {
-            return Json( _context.ToDos.Include(t => t.Category).Where(t => t.IsActive==true).ToList());
+            return _context.ToDos.Include(t => t.Category).Where(t => t.IsActive == true).ToList();
         }
+
         public IActionResult SetIsActive(int id)
         {
             ToDo todo = _context.ToDos.Find(id);
             todo.IsActive = false;
             _context.ToDos.Update(todo);
             _context.SaveChanges();
-            return RedirectToAction("Index","Home");
+
+            return RedirectToAction("Index", "Home");
         }
+
         public IActionResult Add()
         {
-           
-
+            CategoryController categoryController = new CategoryController(_context);
+            ViewData["categories"] = categoryController.GetAll();
             return View();
+        }
+        [HttpPost]
+        public IActionResult Add(ToDo todo)
+        {
+            _context.ToDos.Add(todo);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }
