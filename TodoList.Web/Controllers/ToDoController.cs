@@ -25,9 +25,9 @@ namespace TodoList.Web.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        public List<ToDo> GetAll() 
+        public IActionResult GetAll() 
         {
-            return _context.ToDos.Include(t => t.Category).Where(t => t.IsActive).ToList();
+            return Json( _context.ToDos.Include(t => t.Category).Where(t => t.IsActive==true).ToList());
         }
         public IActionResult SetIsActive(int id)
         {
@@ -39,6 +39,8 @@ namespace TodoList.Web.Controllers
         }
         public IActionResult Add()
         {
+           
+
             return View();
         }
     }

@@ -1,31 +1,35 @@
 ﻿@model ToDo
+@{
+    var kategoriListesi = ViewData["categories"] as List<Category>;
+}
 
 <div class="container">
     <form method="post">
         <div class="mb-3 row">
             <label for="inputName" class="col-4 col-form-label">Başlık</label>
             <div class="col-8">
-                <input asp-for="Title" class="form-control"  placeholder="başlık giriniz">
-            </div>
-        </div>
-        
-        <div class="mb-3 row">
-            <label for="inputName" class="col-4 col-form-label">içerik</label>
-            <div class="col-8">
-                <input asp-for="Desciription" class="form-control" placeholder="içerik giriniz">
+                <input asp-for="Title" class="form-control" placeholder="Başlık giriniz">
             </div>
         </div>
 
 
         <div class="mb-3 row">
-            <label for="inputName" class="col-4 col-form-label">kategori seçiniz</label>
+            <label for="inputName" class="col-4 col-form-label">İçerik</label>
             <div class="col-8">
-                <input asp-for="Desciription" class="form-control" placeholder="içerik giriniz">
+                <input asp-for="Desciription" class="form-control" placeholder="İçerik giriniz">
             </div>
         </div>
+
+        <div class="mb-3 row">
+            <label for="inputName" class="col-4 col-form-label">Kategori Seçiniz</label>
+            <div class="col-8">
+                <select class="form-select" asp-for="CategoryId" asp-items="@(new SelectList(kategoriListesi,"Id","Name"))"></select>
+            </div>
+        </div>
+
         <div class="mb-3 row">
             <div class="offset-sm-4 col-sm-8">
-                <button type="submit" class="btn btn-primary">ekle</button>
+                <button type="submit" class="btn btn-primary">Ekle</button>
             </div>
         </div>
     </form>

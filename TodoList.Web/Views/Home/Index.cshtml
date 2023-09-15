@@ -1,24 +1,39 @@
-﻿@model List<ToDo>
+﻿<a class="btn btn-success" id="btnEkle">Ekle</a>
 
-    <a class="btn btn-success" asp-controller="ToDo" asp-action="Add">ekle</a>
+<div id="divTodos" class="row"></div>
 
-<div class="row">
-    @foreach(var todo in Model)
-    {
-        <div class="col-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">@todo.Title</h3>
-                    <p class="card-text">@todo.Desciription</p>
-                </div>
-                 <div class class="card-footer text-center">
-                     <a asp-action="SetIsActive" asp-controller="ToDo" asp-route-id="@todo.Id" class="btn btn-success" >Yapıldı</a>
-                    <a  asp-controller="ToDo" asp-action="Delete" asp-route-id="@todo.Id" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
+@section scripts{
+    <script type="text/javascript">
 
-            </div>
-           
-        </div>
-        </div>
-    }
-  
-</div>
+        $("#btnEkle").click(function () {
+            alert("test")
+        });
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/ToDo/GetAll',
+            success: function (res) {
+
+                for (var item of res) {
+                    $("divTodos").append(` <div class="col-4">
+                  <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title bg-danger text-white"></h3>
+                        <p class="card-text"></p>
+                        öncelik:<span> </span>
+                    </div>
+                    <div class class="card-footer text-center">
+                        <a class="btn btn-success">Yapıldı</a>
+                        <a onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
+
+                    </div>
+
+                  </div>
+                </div>`)
+                }
+            }
+        })
+
+    </script>
+}
