@@ -12,7 +12,9 @@ namespace TodoList.Models
         public string? Desciription { get; set; }
         public bool IsActive { get; set; }=true;
         public int CategoryId { get; set; }
+        public int UserId { get; set; }
         public virtual Category Category { get; set; }
+        public virtual AppUser User { get; set; }
 
     }
 }
