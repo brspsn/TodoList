@@ -14,9 +14,7 @@
                  <div class class="card-footer text-center">
                      <a asp-action="SetIsActive" asp-controller="ToDo" asp-route-id="@todo.Id" class="btn btn-success" >Yapıldı</a>
                     <a  asp-controller="ToDo" asp-action="Delete" asp-route-id="@todo.Id" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
-
             </div>
-           
         </div>
         </div>
     }
