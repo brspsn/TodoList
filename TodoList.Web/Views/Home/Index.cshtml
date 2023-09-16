@@ -9,31 +9,41 @@
             alert("test")
         });
 
-
-        $.ajax({
-            type: 'GET',
-            url: '/ToDo/GetAll',
-            success: function (res) {
-
-                for (var item of res) {
-                    $("divTodos").append(` <div class="col-4">
-                  <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title bg-danger text-white"></h3>
-                        <p class="card-text"></p>
-                        öncelik:<span> </span>
-                    </div>
-                    <div class class="card-footer text-center">
-                        <a class="btn btn-success">Yapıldı</a>
-                        <a onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
-
-                    </div>
-
-                  </div>
-                </div>`)
-                }
-            }
+        $(document).ready(function () {
+            ToDoGetir();
         })
+
+        function ToDoGetir() {
+            $.ajax({
+                type: 'GET',
+                url: '/ToDo/GetAll',
+                success: function (res) {
+
+                    for (var item of res) {
+                        $("#divTodos").append(` <div class="col-4">
+                                          <div class="card">
+                                            <div class="card-body">
+                                                <h3 class="card-title bg-primary text-white">${item.title}</h3>
+                                                                <p class="card-text">${item.Desciription}</p>
+                                                        öncelik:<span>${item.category.name}</span>
+                                            </div>
+                                            <div class class="card-footer text-center">
+                                                <a class="btn btn-success">Yapıldı</a>
+                                                <a onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
+
+                                            </div>
+
+                                          </div>
+                                        </div>`)
+                    }
+                }
+            })
+        
+        }
+
+
+        
+ 
 
     </script>
 }

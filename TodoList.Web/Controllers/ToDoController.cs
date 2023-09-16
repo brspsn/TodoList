@@ -39,9 +39,17 @@ namespace TodoList.Web.Controllers
         }
         public IActionResult Add()
         {
-           
-
+            CategoryController categoryController = new CategoryController(_context);
+            ViewData["categories"] = categoryController.GetAll();
             return View();
+        }
+        [HttpPost]
+        public IActionResult Add(ToDo todo)
+        {
+            _context.ToDos.Add(todo);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }
