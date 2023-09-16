@@ -13,9 +13,9 @@ namespace TodoList.Web.Controllers
             _context = context;
         }
 
-        public List<Category> GetAll()
+        public IActionResult GetAll()
         {
-            return _context.Categories.ToList();
+            return Json(_context.Categories.ToList());
         }
     }
 }

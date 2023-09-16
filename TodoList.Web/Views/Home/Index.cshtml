@@ -2,44 +2,141 @@
 
 <div id="divTodos" class="row"></div>
 
+<div class="modal fade" id="modalAdd" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Todo Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container">
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Başlık</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="txtTitle" placeholder="Görev başlığı giriniz">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Açıklama</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="txtDesciription" placeholder="açıklama giriniz">
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Kategori</label>
+                        <div class="col-8">
+                            <select class="form-select" name="script" id="ddlCategory">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <a id="btnSave" class="btn btn-primary">Kaydet</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section scripts{
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            ToDoGetir();
+        });
         $("#btnEkle").click(function () {
-            alert("test")
+            $("input").val('');
+            $("#modalAdd").modal('show');
+            fillCategories();
+            $("#btnSave").off().click(function () {
+
+                let veri = {
+                    title: $("#txtTitle").val(),
+                    desciription: $("#txtDesciription").val(),
+                    CategoryId: $("#ddlCategory").val()
+                };
+                $.ajax({
+                    type:'POST',
+                    url:'ToDo/Add',
+                    data:veri,
+                    success: function () {
+                        $("#modalAdd").modal('hide');
+                    }
+                });
+            });
         });
 
-
-        $.ajax({
-            type: 'GET',
-            url: '/ToDo/GetAll',
-            success: function (res) {
-
-                for (var item of res) {
-                    $("divTodos").append(` <div class="col-4">
-                  <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title bg-danger text-white"></h3>
-                        <p class="card-text"></p>
-                        öncelik:<span> </span>
-                    </div>
-                    <div class class="card-footer text-center">
-                        <a class="btn btn-success">Yapıldı</a>
-                        <a onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="btn btn-danger">Sil</a>
-
-                                            </div>
-
-                                          </div>
-                                        </div>`)
+        function ToDoGetir() {
+            $.ajax({
+                type: 'GET',
+                url: '/ToDo/GetAll',
+                success: function (res) {
+                    $("#divTodos").empty();
+                    for (var item of res) {
+                        $("#divTodos").append(` <div class="col-4">
+                                                                 <div class="card">
+                                                                 <div class="card-body">
+                                                                         <h3 class="card-title bg-primary text-white">${item.title}</h3>
+                                                                  <p class="card-text">${item.Desciription}</p>
+                                                               öncelik:<span>${item.category.name}</span>
+                                                              </div>
+                                                             <div class class="card-footer text-center">
+                                                              <a onclick="setYapildi(${item.id})" class="btn btn-success">Yapıldı</a>
+                                                              <a onclick="sil(${item.id})" class="btn btn-danger">Sil</a>
+                                                          </div>
+                                                           </div>
+                                                        </div>`)
                     }
                 }
             })
-        
         }
 
+        function setYapildi(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/ToDo/SetIsActive',
+                data: { id: id },
+                success: function () {
+                    ToDoGetir();
+                }
+            })
+        }
+
+        function sil(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/ToDo/Delete',
+                data: { id: id },
+                success: function () {
+                    ToDoGetir();
+                }
+            })
+        }
+
+        function fillCategories(id) {
+            $("#ddlCategory").empty();
+
+            $.ajax({
+                type: 'GET',
+                url: 'Category/GetAll',
+                success: function (res) {
+                    for (var item of res) {
+                        $("#ddlCategory").append(new Option(item.name, item.id, false, item.id == id));
+                    }
+                }
+            });
+            
+
+        }
 
         
- 
-
     </script>
 }

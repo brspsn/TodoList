@@ -19,20 +19,22 @@ namespace TodoList.Web.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             _context.ToDos.Remove(_context.ToDos.Find(id));
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return Ok();
 
         }
 
-        public List<ToDo> GetAll()
+        public IActionResult GetAll()
         {
-            return _context.ToDos.Include(t => t.Category).Where(t => t.IsActive == true).ToList();
+            return Json(_context.ToDos.Include(t => t.Category).Where(t => t.IsActive == true).ToList());
         }
 
+        [HttpPost]
         public IActionResult SetIsActive(int id)
         {
             ToDo todo = _context.ToDos.Find(id);
@@ -40,7 +42,7 @@ namespace TodoList.Web.Controllers
             _context.ToDos.Update(todo);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return Ok();
         }
 
         public IActionResult Add()
@@ -54,7 +56,7 @@ namespace TodoList.Web.Controllers
         {
             _context.ToDos.Add(todo);
             _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Home");
 
         }
     }
