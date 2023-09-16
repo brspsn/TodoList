@@ -74,6 +74,7 @@
             });
         });
 
+
         function ToDoGetir() {
             $.ajax({
                 type: 'GET',
@@ -81,19 +82,20 @@
                 success: function (res) {
                     $("#divTodos").empty();
                     for (var item of res) {
-                        $("#divTodos").append(` <div class="col-4">
-                                                                 <div class="card">
-                                                                 <div class="card-body">
-                                                                         <h3 class="card-title bg-primary text-white">${item.title}</h3>
-                                                                  <p class="card-text">${item.Desciription}</p>
-                                                               öncelik:<span>${item.category.name}</span>
-                                                              </div>
-                                                             <div class class="card-footer text-center">
-                                                              <a onclick="setYapildi(${item.id})" class="btn btn-success">Yapıldı</a>
-                                                              <a onclick="sil(${item.id})" class="btn btn-danger">Sil</a>
-                                                          </div>
-                                                           </div>
-                                                        </div>`)
+
+                        $("#divTodos").append(`<div class="col-4">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                        <h3 class="card-title bg-danger text-white">${item.title}</h3>
+
+                                                    <p class="card-text">${item.description}</p>
+                                                    Öncelik : <span>${item.category.name}</span>
+                                                </div>
+                                                        <div class="card-footer text-center"><a onclick="setYapildi(${item.id})" class="btn btn-success">Done</a> <a onclick="Delete(${item.id})" class="btn btn-danger">Sil</a> </div>
+                                            </div>
+                                        </div>`)
+
                     }
                 }
             })
