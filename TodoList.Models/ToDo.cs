@@ -9,7 +9,7 @@ namespace TodoList.Models
     public class ToDo:BaseModel
     {
         public string Title { get; set; }
-        public string? Desciription { get; set; }
+        public string? Description { get; set; }
         public bool IsActive { get; set; }=true;
         public int CategoryId { get; set; }
         public int UserId { get; set; }

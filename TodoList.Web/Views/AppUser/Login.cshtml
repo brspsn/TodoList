@@ -58,23 +58,22 @@
     </section> <!-- partial -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
-        
         $("#btnLogin").click(function () {
-
             $.ajax({
-                type:'POST',
-                url:'AppUser/Login',
-                Data: {
-                    username:$("#txtUsername").val(),
-                    password:$("#txtpassword").val()
+                type: 'POST',
+                url: '/AppUser/Login',
+                data: {
+                    username: $("#txtUsername").val(),
+                    password: $("#txtPassword").val()
                 },
-                Error: function () {
-                    alert("giriş başarısız");
+                error: function () {
+                    alert("giriş başarısız !");
+                },
+                success: function () {
+                    location.href = '/Home/Index';
                 }
-            });
-
-
-        });
+            })
+        })
     </script>
 
 
