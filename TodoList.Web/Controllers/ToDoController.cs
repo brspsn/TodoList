@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TodoList.Data;
 using TodoList.Models;
 
@@ -31,7 +32,8 @@ namespace TodoList.Web.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(_context.ToDos.Include(t => t.Category).Where(t => t.IsActive == true).ToList());
+
+            return Json(_context.ToDos.Include(t => t.Category).Where(t => t.IsActive == true&& t.UserId == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList());
         }
 
         [HttpPost]
@@ -54,6 +56,7 @@ namespace TodoList.Web.Controllers
         [HttpPost]
         public IActionResult Add(ToDo todo)
         {
+            todo.UserId=int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             _context.ToDos.Add(todo);
             _context.SaveChanges();
             return RedirectToAction("Index","Home");

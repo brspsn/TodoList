@@ -1,0 +1,186 @@
+﻿<a href="#" id="btnAdd" class="btn btn-success">Kullanıcı Ekle</a>
+<div class="row">
+    <table id="tblUsers" class="table table-striped table-hover">
+    </table>
+
+</div>
+
+<div class="modal fade" id="modalAdd" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Yeni Kullanıc Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container">
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Kullanıcı Adı</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="txtUsername" placeholder="Bir kullanıcı adı giriniz">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Şifre Belirleyin</label>
+                        <div class="col-8">
+                            <input type="password" class="form-control" id="txtPassword" placeholder="Lütfen bir şifre giriniz">
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label for="inputName" class="col-4 col-form-label">Rol</label>
+                        <div class="col-8">
+                            <select class="form-select" name="script" id="ddlRoles">
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <a id="btnSave" class="btn btn-primary">Kaydet</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            fillDataTable();
+
+            $("#btnAdd").click(function () {
+                $("input.form-control").val('')
+                $("#modalAdd").modal("show");
+                $("#btnSave").off().click(function () {
+                    var username = $("#txtUsername").val();
+                    var password = $("#txtPassword").val();
+                    var roleId = $("#ddlRoles").val();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/AppUser/Add',
+                        data: { userName: username, password: password, userTypeId: roleId },
+                        success: function () {
+                            $("#modalAdd").modal("hide");
+                            $("#tblUsers").DataTable().ajax.reload();
+                            toastr.success("Başarıyla eklendi");
+                        }
+                    })
+                });
+                fillDdlRoles();
+            });
+
+            
+
+        });
+
+
+
+
+        function deleteUser(userId) {
+
+            Swal.fire({
+                title: 'Silmek istediğinizden emin misiniz ?',
+
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel',
+            }).then(function (result) {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/AppUser/Delete',
+                        data: { id: userId },
+                        success: function () {
+
+                            $("#tblUsers").DataTable().ajax.reload();
+                            toastr.success("Başarıyla silinmiştir");
+                        }
+                    })
+
+
+
+
+                }
+            })
+
+
+
+
+
+        }
+
+        function fillDataTable() {
+            $("#tblUsers").DataTable({
+                ajax: '/AppUser/GetAll',
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'userName', title: 'Kullanıcı Adı' },
+                    { data: 'userType.name', title: 'Kullanıcı Tipi' },
+                    {
+                        data: 'id', title: 'İşlemler', render: function (data,type,row) {
+                            return `<a href="#" onclick="deleteUser(${data})" class="btn btn-danger">Sil</a> <a href="#" onclick="updateUser(${data},'${row.userName}','${row.password}',${row.userTypeId})" class="btn btn-primary">Düzenle</a>`;
+                        }
+                    }
+                ],
+
+
+            });
+        }
+
+        function fillDdlRoles(userTypeId) {
+            $.ajax({
+                type: 'GET',
+                url: '/UserType/GetAll',
+                success: function (data) {
+                    $("#ddlRoles").empty();
+                    for (var item of data) {
+                        $("#ddlRoles").append(new Option(item.name, item.id, false, item.id == userTypeId));
+                    }
+                }
+            })
+        }
+
+        function updateUser(id, username, password, userTypeId) {
+
+            fillDdlRoles(userTypeId);
+            $("#txtUsername").val(username);
+            $("#txtPassword").val(password);
+            $("#ddlRoles").val(userTypeId);
+            $("#modalAdd").modal("show");
+
+            $("#modalTitle").text("Kullanıcı Güncelle");
+            $("#btnSave").text("Güncelle");
+            //$("#btnSave").unbind("click");
+            $("#btnSave").off();
+            $("#btnSave").click(function () {
+                var username = $("#txtUsername").val();
+                var password = $("#txtPassword").val();
+                var roleId = $("#ddlRoles").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/AppUser/Update',
+                    data: { id: id, userName: username, password: password, userTypeId: roleId },
+                    success: function () {
+                        $("#modalAdd").modal("hide");
+                        $("#tblUsers").DataTable().ajax.reload();
+                        toastr.success("Başarıyla güncellendi");
+                    }
+                })
+            });
+        }
+    </script>
+}

@@ -21,6 +21,7 @@ namespace TodoList.Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ToDo> ToDos { get; set; }
         public virtual DbSet<AppUser> Users { get; set; }
+        public virtual DbSet<UserType> UserTypes { get; set; }
 
 
         

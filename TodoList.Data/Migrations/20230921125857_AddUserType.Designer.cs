@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoList.Data;
 
@@ -11,9 +12,11 @@ using TodoList.Data;
 namespace TodoList.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230921125857_AddUserType")]
+    partial class AddUserType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace TodoList.Data.Migrations
 
                     b.HasIndex("UserTypeId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TodoList.Models.Category", b =>
@@ -74,7 +77,7 @@ namespace TodoList.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TodoList.Models.ToDo", b =>
@@ -113,7 +116,7 @@ namespace TodoList.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ToDos", (string)null);
+                    b.ToTable("ToDos");
                 });
 
             modelBuilder.Entity("TodoList.Models.UserType", b =>
@@ -136,7 +139,7 @@ namespace TodoList.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes", (string)null);
+                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("TodoList.Models.AppUser", b =>
