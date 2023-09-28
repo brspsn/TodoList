@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TodoList.Data;
+using TodoList.Models;
+using TodoList.Repository.Abstract;
+using TodoList.Repository.Concrete;
+using TodoList.Repository.Shared.Abstract;
+using TodoList.Repository.Shared.Concrete;
 
 namespace TodoList.Web
 {
@@ -24,6 +29,9 @@ namespace TodoList.Web
             });
 
             builder.Services.AddDbContext<ApplicationDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConntetion")));
+            builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+            builder.Services.AddScoped<ITodoRepositorty, ToDoRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

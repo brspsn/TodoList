@@ -6,54 +6,69 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList.Data;
+using TodoList.Models;
 using TodoList.Repository.Shared.Abstract;
 
 namespace TodoList.Repository.Shared.Concrete
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : BaseModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly DbSet<T> _dbset;
+        private readonly DbSet<T> _dbSet;
 
         public Repository(ApplicationDbContext context)
         {
             _context = context;
-            _dbset = _context.Set<T>();
+            _dbSet = _context.Set<T>();
         }
 
         public void Add(T entity)
         {
-            _dbset.Add(entity);
+            _dbSet.Add(entity);
         }
 
         public void Delete(T entity)
         {
-            _dbset.Remove(entity);
+            entity.IsDeleted = true;
+            _dbSet.Update(entity);
         }
 
-        public List<T> GetAll()
+        public void DeleteById(int id)
         {
-            return _dbset.ToList();
+            T entity =_dbSet.Find(id);
+            entity.IsDeleted = true;
+            _dbSet.Update(entity);
+
         }
 
-        public List<T> GetAll(Expression<Func<T, bool>> filter)
+        public IQueryable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.Where(t=>t.IsDeleted==false);
+        }
+
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter)
+        {
+             return GetAll().Where(filter);
         }
 
         public T GetById(int id)
         {
-            return _dbset.Find(id);
+            return _dbSet.Find(id);
         }
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
         {
-            return _dbset.FirstOrDefault(filter);
+            return _dbSet.FirstOrDefault(filter);
+        }
+
+        public void save()
+        {
+            _context.SaveChanges();
         }
 
         public void Update(T entity)
         {
-            _dbset.Update(entity);
+            _dbSet.Update(entity);
         }
     }
 }

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\Concrete\NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TodoList.Data\TodoList.Data.csproj" />
   </ItemGroup>
 
