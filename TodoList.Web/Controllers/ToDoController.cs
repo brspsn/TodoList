@@ -27,7 +27,7 @@ namespace TodoList.Web.Controllers
         public IActionResult Delete(int id)
         {
             _repo.DeleteById(id);
-            _repo.save();
+            _repo.Save();
 
             return Ok();
 
@@ -50,7 +50,7 @@ namespace TodoList.Web.Controllers
             //_context.SaveChanges();
 
             _repo.SetIsActive(id);
-            _repo.save();
+            _repo.Save();
 
             return Ok();
         }
@@ -64,7 +64,7 @@ namespace TodoList.Web.Controllers
             //return RedirectToAction("Index","Home");
 
             _repo.Add(todo);
-            _repo.save();
+            _repo.Save();
 
             return Ok();
 

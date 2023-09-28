@@ -61,7 +61,7 @@ namespace TodoList.Repository.Shared.Concrete
             return _dbSet.FirstOrDefault(filter);
         }
 
-        public void save()
+        public void Save()
         {
             _context.SaveChanges();
         }

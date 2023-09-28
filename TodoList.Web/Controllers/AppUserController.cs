@@ -8,15 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TodoList.Data;
 using TodoList.Models;
+using TodoList.Repository.Shared.Abstract;
 
 namespace TodoList.Web.Controllers
 {
     public class AppUserController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        public AppUserController(ApplicationDbContext context)
+        private readonly IRepository<AppUser> _repo;
+        public AppUserController(IRepository<AppUser> repo)
         {
-            _context = context;
+            _repo= repo;
         }
         public IActionResult Login()
         {
@@ -26,7 +27,7 @@ namespace TodoList.Web.Controllers
         [HttpPost]
         public IActionResult Login(AppUser appUser)
         {
-            AppUser user = _context.Users.Where(u => u.UserName == appUser.UserName && u.Password == appUser.Password).Include(u=>u.UserType).First();
+            AppUser user = _repo.GetAll(u => u.UserName == appUser.UserName && u.Password == appUser.Password).Include(u => u.UserType).First();
 
             if (user != null)
             {
@@ -54,7 +55,7 @@ namespace TodoList.Web.Controllers
             }
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
@@ -63,26 +64,24 @@ namespace TodoList.Web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
-            return Json(new {data= _context.Users.Where(u => u.IsDeleted == false).Include(u => u.UserType).ToList() });
+            return Json(new { data = _repo.GetAll(u => u.IsDeleted == false).Include(u => u.UserType).ToList() });
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            AppUser user = _context.Users.Find(id);
-            user.IsDeleted= true;
-            _context.Users.Update(user);
-            _context.SaveChanges();
+            _repo.DeleteById(id);
+            _repo.Save();
             return Ok();
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Add(AppUser appUser) 
+        public IActionResult Add(AppUser appUser)
         {
-            _context.Users.Add(appUser);
-            _context.SaveChanges();
+            _repo.Add(appUser);
+            _repo.Save();
             return Ok();
         }
 
@@ -90,13 +89,13 @@ namespace TodoList.Web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Update(AppUser appUser)
         {
-            _context.Users.Update(appUser);
-            _context.SaveChanges();
+            _repo.Update(appUser);
+            _repo.Save();
             return Ok();
         }
 
 
-        
+
     }
 
 }
