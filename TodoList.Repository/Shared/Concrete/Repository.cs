@@ -22,6 +22,7 @@ namespace TodoList.Repository.Shared.Concrete
             _dbSet = _context.Set<T>();
         }
 
+
         public void Add(T entity)
         {
             _dbSet.Add(entity);
@@ -35,20 +36,22 @@ namespace TodoList.Repository.Shared.Concrete
 
         public void DeleteById(int id)
         {
-            T entity =_dbSet.Find(id);
+            T entity = _dbSet.Find(id);
             entity.IsDeleted = true;
             _dbSet.Update(entity);
-
         }
+
 
         public IQueryable<T> GetAll()
         {
-            return _dbSet.Where(t=>t.IsDeleted==false);
+            return _dbSet.Where(x => x.IsDeleted == false);
+
+
         }
 
         public IQueryable<T> GetAll(Expression<Func<T, bool>> filter)
         {
-             return GetAll().Where(filter);
+            return GetAll().Where(filter);
         }
 
         public T GetById(int id)
@@ -61,10 +64,7 @@ namespace TodoList.Repository.Shared.Concrete
             return _dbSet.FirstOrDefault(filter);
         }
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+
 
         public void Update(T entity)
         {

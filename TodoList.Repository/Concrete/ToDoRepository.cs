@@ -12,7 +12,7 @@ using TodoList.Repository.Shared.Concrete;
 
 namespace TodoList.Repository.Concrete
 {
-    public class ToDoRepository : Repository<ToDo>, ITodoRepositorty
+    public class ToDoRepository : Repository<ToDo>, IToDoRepository
     {
         private readonly ApplicationDbContext _context;
         public ToDoRepository(ApplicationDbContext context) : base(context)

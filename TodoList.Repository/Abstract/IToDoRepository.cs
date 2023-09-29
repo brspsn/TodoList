@@ -8,7 +8,7 @@ using TodoList.Repository.Shared.Abstract;
 
 namespace TodoList.Repository.Abstract
 {
-    public interface ITodoRepositorty:IRepository<ToDo>
+    public interface IToDoRepository: IRepository<ToDo>
     {
         void SetIsActive(int id);
     }

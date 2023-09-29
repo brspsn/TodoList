@@ -20,6 +20,6 @@ namespace TodoList.Repository.Shared.Abstract
         //bu metod link expresini alacakki içine alacağı exprssinin sonucunun true yada false olması lazım,o ifadeden kurtulan birşey varsa T olarak geri gön
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
 
-        void Save();
+        
     }
 }

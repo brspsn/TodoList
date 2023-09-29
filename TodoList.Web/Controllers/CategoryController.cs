@@ -7,16 +7,17 @@ namespace TodoList.Web.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly IRepository<Category> _repo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(IRepository<Category> repo)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult GetAll()
         {
-            return Json(_repo.GetAll().ToList());
+
+            return Json(_unitOfWork.Categories.GetAll().ToList());
         }
     }
 }
