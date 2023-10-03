@@ -19,6 +19,10 @@ namespace TodoList.Repository.Concrete
         {
             _context = context;
         }
+        //public override void Delete(ToDo entity)
+        //{
+        //    _context.ToDos.Remove(entity);
+        //}
         public void SetIsActive(int id)
         {
             ToDo todo = _context.ToDos.Find(id);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace TodoList.Repository.Shared.Concrete
 
         public IRepository<UserType> UserTypes { get; private set; }
 
+        public IRepository<Tag> Tags { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -30,7 +33,7 @@ namespace TodoList.Repository.Shared.Concrete
             ToDos = new ToDoRepository(context);
             Categories = new Repository<Category>(context);
             UserTypes = new Repository<UserType>(context);
-
+            Tags= new Repository<Tag>(context);
         }
 
         public void Save()

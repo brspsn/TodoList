@@ -15,7 +15,7 @@ namespace TodoList.Repository.Shared.Abstract
         IToDoRepository ToDos { get; }
         IRepository<Category> Categories { get; }
         IRepository<UserType> UserTypes { get; }
-
+        IRepository<Tag> Tags { get; }
         void Save();
     }
 }
